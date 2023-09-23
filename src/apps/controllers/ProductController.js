@@ -1,13 +1,25 @@
+import { Op } from "sequelize";
 import * as Yup from "yup";
 import Product from "../models/Product";
 
 class ProductController {
   async index(request, response) {
+    const { search } = request.query;
+
+    let where = {};
+    if (search) {
+      where = {
+        ...where,
+        name: { [Op.substring]: search },
+      };
+    }
+
     const page = request.query.page || 1;
-    const limit = request.query.page || 20;
+    const limit = request.query.limit || 20;
 
     const products = await Product.findAll({
       order: ["id"],
+      where,
       limit,
       offset: limit * page - limit,
     });

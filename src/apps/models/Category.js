@@ -14,6 +14,7 @@ Category.init(
       allowNull: false,
     },
     name: Sequelize.STRING,
+    description: Sequelize.STRING,
     picture: Sequelize.STRING,
   },
   {
