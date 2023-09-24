@@ -4,13 +4,20 @@ import Product from "../models/Product";
 
 class ProductController {
   async index(request, response) {
-    const { search } = request.query;
+    const { search, category } = request.query;
 
     let where = {};
     if (search) {
       where = {
         ...where,
         name: { [Op.substring]: search },
+      };
+    }
+
+    if (category) {
+      where = {
+        ...where,
+        category,
       };
     }
 
