@@ -2,6 +2,7 @@ import Sequelize, { Model } from "sequelize";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import bcrypt from "bcryptjs";
 import config from "../../config/database";
+import Cart from "./Cart";
 
 const sequelize = new Sequelize(config);
 
@@ -33,5 +34,8 @@ User.addHook("beforeSave", async (user) => {
     user.password_hash = await bcrypt.hash(user.password, 8);
   }
 });
+
+User.hasMany(Cart);
+Cart.belongsTo(User, { foreignKey: "user_id" });
 
 export default User;

@@ -12,6 +12,7 @@ import confirm from "./apps/controllers/ConfirmCodeController";
 import forgotPassword from "./apps/controllers/ForgotPassword";
 import categories from "./apps/controllers/CategoryController";
 import products from "./apps/controllers/ProductController";
+import cart from "./apps/controllers/CartController";
 
 import multerConfig from "./config/multer";
 
@@ -58,5 +59,11 @@ routes.get("/products/:id", products.show);
 routes.post("/products", products.create);
 routes.put("/products/:id", products.update);
 routes.delete("/products/:id", products.delete);
+
+// Carts
+routes.get("/cart/:id", cart.index);
+routes.post("/cart", cart.create);
+routes.put("/cart", cart.update);
+routes.delete("/cart/:id", cart.delete);
 
 export default routes;

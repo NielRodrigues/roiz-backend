@@ -2,6 +2,7 @@
 import * as Yup from "yup";
 import bcrypt from "bcryptjs";
 import User from "../models/User";
+import Cart from "../models/Cart";
 
 class UserController {
   async index(request, response) {
@@ -13,7 +14,14 @@ class UserController {
   async show(request, response) {
     const { id } = request.params;
 
-    const user = await User.findByPk(id);
+    const user = await User.findByPk(id, {
+      include: [
+        {
+          model: Cart,
+          order: ["id"],
+        },
+      ],
+    });
 
     if (!user) {
       return response.status(404).json({ error: "User not found" });

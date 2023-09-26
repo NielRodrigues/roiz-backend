@@ -1,6 +1,7 @@
 import * as Yup from "yup";
 import bcrypt from "bcryptjs";
 import User from "../models/User";
+import Cart from "../models/Cart";
 
 class LoginController {
   async login(request, response) {
@@ -18,6 +19,12 @@ class LoginController {
 
     const user = await User.findOne({
       where: { email },
+      include: [
+        {
+          model: Cart,
+          order: ["id"],
+        },
+      ],
     });
 
     if (user) {
