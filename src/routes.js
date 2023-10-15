@@ -13,6 +13,7 @@ import forgotPassword from "./apps/controllers/ForgotPassword";
 import categories from "./apps/controllers/CategoryController";
 import products from "./apps/controllers/ProductController";
 import cart from "./apps/controllers/CartController";
+import message from "./apps/controllers/MessageController";
 
 import multerConfig from "./config/multer";
 
@@ -65,5 +66,10 @@ routes.get("/cart/:id", cart.index);
 routes.post("/cart", cart.create);
 routes.put("/cart", cart.update);
 routes.delete("/cart/:id", cart.delete);
+
+// Message
+routes.get("/claim", message.index);
+routes.post("/claim", message.create);
+
 
 export default routes;
