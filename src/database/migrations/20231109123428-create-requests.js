@@ -19,14 +19,15 @@ module.exports = {
       },
       id_payment_mp: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       status_request: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
+        defaultValue: "Preparing"
       },
       value: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
         allowNull: false,
       },
       created_at: {

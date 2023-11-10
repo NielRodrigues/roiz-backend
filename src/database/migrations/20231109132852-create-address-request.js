@@ -21,6 +21,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      neighborhood: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       number: {
         type: Sequelize.INTEGER,
         allowNull: false,

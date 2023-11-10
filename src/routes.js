@@ -17,6 +17,7 @@ import message from "./apps/controllers/MessageController";
 import favorite from "./apps/controllers/FavoritesController";
 import rates from "./apps/controllers/RateController";
 import request from "./apps/controllers/RequestController";
+import payment from "./apps/controllers/PaymentController";
 
 import multerConfig from "./config/multer";
 
@@ -88,6 +89,10 @@ routes.delete("/rates/:id", rates.delete);
 routes.get("/requests", request.index);
 routes.get("/requests/:id", request.show);
 routes.post("/requests", request.create);
+
+// Payment
+routes.post("/payment", payment.create);
+
 
 
 export default routes;

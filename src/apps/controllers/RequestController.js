@@ -48,11 +48,10 @@ class RequestController {
   async create(request, response) {
     const schema = Yup.object().shape({
       user_id: Yup.number().required(),
-      id_payment_mp: Yup.number().required(),
-      status_request: Yup.string().required(),
       value: Yup.number().required(),
       address: Yup.object().shape({
         street: Yup.string().required(),
+        neighborhood: Yup.string().required(),
         number: Yup.number().required(),
         postal_code: Yup.string().required(),
         complement: Yup.string(),
@@ -82,7 +81,6 @@ class RequestController {
       const findProduct = await Product.findByPk(request.body.products[i].product_id)
 
       if (findProduct) {
-        console.log("\n\n\nCriando...")
         await ProductRequest.create({
           ...request.body.products[i],
           request_id: requestCreate.id,

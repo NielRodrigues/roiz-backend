@@ -21,6 +21,7 @@ Address.init(
       allowNull: false,
     },
     street: Sequelize.STRING,
+    neighborhood: Sequelize.STRING,
     number: Sequelize.INTEGER,
     postal_code: Sequelize.STRING,
     complement: Sequelize.STRING,

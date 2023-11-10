@@ -24,7 +24,7 @@ Request.init(
     },
     id_payment_mp: Sequelize.INTEGER,
     status_request: Sequelize.STRING,
-    value: Sequelize.INTEGER,
+    value: Sequelize.FLOAT,
   },
   {
     sequelize,
