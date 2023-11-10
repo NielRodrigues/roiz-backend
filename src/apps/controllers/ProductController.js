@@ -1,6 +1,8 @@
 import { Op } from "sequelize";
 import * as Yup from "yup";
 import Product from "../models/Product";
+import Favorite from "../models/Favorite";
+import Rate from "../models/Rate";
 
 class ProductController {
   async index(request, response) {
@@ -17,7 +19,7 @@ class ProductController {
     if (category) {
       where = {
         ...where,
-        category,
+        category: { [Op.iLike]: category },
       };
     }
 
@@ -31,7 +33,25 @@ class ProductController {
       offset: limit * page - limit,
     });
 
-    return response.status(200).json(products);
+    const productInfo = [];
+
+    const promiseProducts =  products.map(async (item) => {
+      const likes = await Favorite.count({ where: { product_id: item.id }});
+      const rates_count = await Rate.count({ where: { product_id: item.id }});
+      const sum = await Rate.sum("stars", { where: { product_id: item.id }});
+      
+    
+      productInfo.push({
+        ...item.dataValues,
+        likes,
+        rates_count,
+        avg: rates_count > 0 ? sum / rates_count : 0,
+      });
+    });
+
+    await Promise.all(promiseProducts)
+
+    return response.status(200).json(productInfo);
   }
 
   async show(request, response) {
@@ -43,7 +63,16 @@ class ProductController {
       return response.status(404).json({ error: "Product not found" });
     }
 
-    return response.status(200).json(findProduct);
+    const likes = await Favorite.count({ where: { product_id: id }});
+    const rates_count = await Rate.count({ where: { product_id: id }});
+    const sum = await Rate.sum("stars", { where: { product_id: id }});
+
+    return response.status(200).json({
+      ...findProduct.dataValues,
+      likes,
+      rates_count,
+      avg: rates_count > 0 ? sum / rates_count : 0,
+    });
   }
 
   async create(request, response) {

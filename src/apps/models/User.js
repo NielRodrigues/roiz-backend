@@ -3,6 +3,7 @@ import Sequelize, { Model } from "sequelize";
 import bcrypt from "bcryptjs";
 import config from "../../config/database";
 import Cart from "./Cart";
+import Favorite from "./Favorite";
 
 const sequelize = new Sequelize(config);
 
@@ -37,5 +38,8 @@ User.addHook("beforeSave", async (user) => {
 
 User.hasMany(Cart);
 Cart.belongsTo(User, { foreignKey: "user_id" });
+
+User.hasMany(Favorite);
+Favorite.belongsTo(User, { foreignKey: "user_id" });
 
 export default User;

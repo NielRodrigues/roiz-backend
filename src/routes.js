@@ -14,6 +14,9 @@ import categories from "./apps/controllers/CategoryController";
 import products from "./apps/controllers/ProductController";
 import cart from "./apps/controllers/CartController";
 import message from "./apps/controllers/MessageController";
+import favorite from "./apps/controllers/FavoritesController";
+import rates from "./apps/controllers/RateController";
+import request from "./apps/controllers/RequestController";
 
 import multerConfig from "./config/multer";
 
@@ -70,6 +73,21 @@ routes.delete("/cart/:id", cart.delete);
 // Message
 routes.get("/claim", message.index);
 routes.post("/claim", message.create);
+
+// Favorites
+routes.get("/favorites/:id", favorite.index);
+routes.post("/favorites", favorite.create);
+routes.post("/favorites_delete", favorite.delete);
+
+// Rates
+routes.get("/rates", rates.index);
+routes.post("/rates", rates.create);
+routes.delete("/rates/:id", rates.delete);
+
+// Request
+routes.get("/requests", request.index);
+routes.get("/requests/:id", request.show);
+routes.post("/requests", request.create);
 
 
 export default routes;

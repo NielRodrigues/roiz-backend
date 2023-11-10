@@ -3,6 +3,7 @@ import * as Yup from "yup";
 import bcrypt from "bcryptjs";
 import User from "../models/User";
 import Cart from "../models/Cart";
+import Favorite from "../models/Favorite";
 
 class UserController {
   async index(request, response) {
@@ -27,7 +28,24 @@ class UserController {
       return response.status(404).json({ error: "User not found" });
     }
 
-    return response.status(200).json(user);
+    const favorites = []
+
+    const favoritesUser = await Favorite.findAll({
+      where: {
+        user_id: id,
+      },
+    });
+
+    const promiseFavorites = favoritesUser.map((item) => {
+      favorites.push(item.product_id)
+    })
+
+    await Promise.all(promiseFavorites);
+
+    return response.status(200).json({
+      ...user.dataValues,
+      favorites
+    });
   }
 
   async create(request, response) {
