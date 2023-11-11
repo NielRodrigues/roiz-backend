@@ -3,25 +3,79 @@ import Request from "../models/Request";
 import Address from "../models/Address";
 import Product from "../models/Product";
 import ProductRequest from "../models/ProductRequest";
+import User from "../models/User";
+import { Op } from "sequelize";
 
 class RequestController {
   async index(request, response) {
+    const { search } = request.query;
+    let where = {};
+
+    if (search && Number(search)) {
+      where = {
+        ...where,
+        id: search,
+      }
+    }
+
+    const page = request.query.page || 1;
+    const limit = request.query.limit || 20;
+
     const requests = await Request.findAll({ 
-      order: ['id'],
+      order: [['createdAt', 'DESC']],
       attributes: { exclude: ["updatedAt"]},
       include: [
         {
           model: Address,
-          attributes: { exclude: ["updatedAt", "createdAt", "RequestId", "request_id"]},
+          attributes: { exclude: ["updatedAt", "createdAt", "RequestId", "request_id", "id"]},
         },
         {
           model: ProductRequest,
-          attributes: { exclude: ["updatedAt", "createdAt", "RequestId", "request_id"]},
+          attributes: { exclude: ["updatedAt", "createdAt", "RequestId", "request_id", "id"]},
         },
       ],
+      limit,
+      where,
+      offset: limit * page - limit,
     });
 
-    return response.status(200).json(requests);
+    const requestWithUser = [];
+
+    const requestPromise = requests.map(async (item) => {
+      const findUser = await User.findByPk(item.user_id, { attributes: { exclude: ["updatedAt", "createdAt", "password_hash"] }})
+    
+      if (findUser) {
+        const productRequests = [];
+
+        const productsPromise = item.product_requests.map(async (product) => {
+            const findProduct = await Product.findByPk(product.product_id, { attributes: { exclude: ["updatedAt", "createdAt", "id", "price_of"] }})
+
+            if (findProduct) {
+              productRequests.push({
+                ...product.dataValues,
+                picture: findProduct.picture,
+                name: findProduct.name,
+                price_purchase: findProduct.price_purchase,
+              })
+            }
+          
+        });
+
+        await Promise.all(productsPromise)
+
+        requestWithUser.push({
+          ...item.dataValues,
+          name: findUser.name,
+          email: findUser.email,
+          tel: findUser.tel,
+          product_requests: productRequests
+        })
+      }
+    });
+
+    await Promise.all(requestPromise)
+
+    return response.status(200).json(requestWithUser);
   }
 
   async show(request, response) {
