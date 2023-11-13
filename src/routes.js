@@ -89,6 +89,8 @@ routes.delete("/rates/:id", rates.delete);
 routes.get("/requests", request.index);
 routes.get("/requests/:id", request.show);
 routes.post("/requests", request.create);
+routes.put("/requests/:id", request.update);
+routes.get("/requests_user/:id", request.showUser);
 
 // Payment
 routes.post("/payment", payment.create);
