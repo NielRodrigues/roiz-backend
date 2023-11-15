@@ -6,9 +6,8 @@ class FilesController {
   async create(request, response) {
     const { originalname, filename } = request.file;
 
-    const uploadImageS3 = new UploadImageS3();
-
-    await uploadImageS3.execute(filename);
+    // const uploadImageS3 = new UploadImageS3();
+    // await uploadImageS3.execute(filename);
 
     const file = await File.create({ name: originalname, path: filename });
 
