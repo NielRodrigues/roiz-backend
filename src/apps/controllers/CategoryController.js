@@ -1,12 +1,17 @@
-import { Op } from "sequelize";
+import Sequelize, { Op } from "sequelize";
 import * as Yup from "yup";
 import Category from "../models/Category";
+import config from "../../config/database";
+
+const sequelize = new Sequelize(config);
 
 class CategoryController {
   async index(request, response) {
     const { search } = request.query;
 
     let where = {};
+    const order = [sequelize.literal("RANDOM()")];
+
     if (search) {
       where = {
         ...where,
@@ -18,7 +23,7 @@ class CategoryController {
     const limit = request.query.limit || 20;
 
     const categories = await Category.findAll({
-      order: ["id"],
+      order,
       where,
       limit,
       offset: limit * page - limit,

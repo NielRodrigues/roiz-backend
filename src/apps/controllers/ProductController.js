@@ -1,18 +1,30 @@
-import { Op } from "sequelize";
+import Sequelize, { Op } from "sequelize";
 import * as Yup from "yup";
 import Product from "../models/Product";
 import Favorite from "../models/Favorite";
 import Rate from "../models/Rate";
+import config from "../../config/database";
+
+const sequelize = new Sequelize(config);
 
 class ProductController {
   async index(request, response) {
-    const { search, category } = request.query;
+    const { search, category, excepct } = request.query;
 
     let where = {};
+    const order = [sequelize.literal("RANDOM()")];
+
     if (search) {
       where = {
         ...where,
         name: { [Op.substring]: search },
+      };
+    }
+
+    if (excepct) {
+      where = {
+        ...where,
+        id: { [Op.not]: excepct }
       };
     }
 
@@ -27,7 +39,7 @@ class ProductController {
     const limit = request.query.limit || 20;
 
     const products = await Product.findAll({
-      order: ["id"],
+      order,
       where,
       limit,
       offset: limit * page - limit,

@@ -8,14 +8,22 @@ import { Op } from "sequelize";
 
 class RequestController {
   async index(request, response) {
-    const { search } = request.query;
+    const { search, status } = request.query;
     let where = {};
 
     if (search && Number(search)) {
       where = {
         ...where,
         id: search,
+      };
+    }
+
+    if (status) {
+      where = {
+        ...where,
+        status_request: { [Op.iLike]: status }
       }
+      ;
     }
 
     const page = request.query.page || 1;
