@@ -18,6 +18,7 @@ import favorite from "./apps/controllers/FavoritesController";
 import rates from "./apps/controllers/RateController";
 import request from "./apps/controllers/RequestController";
 import payment from "./apps/controllers/PaymentController";
+import chart from "./apps/controllers/ChartController";
 
 import multerConfig from "./config/multer";
 
@@ -94,6 +95,9 @@ routes.get("/requests_user/:id", request.showUser);
 
 // Payment
 routes.post("/payment", payment.create);
+
+// Chart
+routes.get("/chart", chart.index);
 
 
 

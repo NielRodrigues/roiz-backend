@@ -4,12 +4,12 @@ import User from "../models/User";
 
 class MessageController {
   async index(request, response) {
-    const messages = await Message.findAll();
+    const messages = await Message.findAll({ order: [["id", "DESC"]] });
 
     const messagesWithUser = [];
 
     const promiseMessage = messages.map(async (item) => {
-      const user = await User.findByPk(item.user_id)
+      const user = await User.findByPk(item.user_id);
 
       if (user) {
         messagesWithUser.push({
