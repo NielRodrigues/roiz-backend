@@ -12,42 +12,44 @@ mercadopago.configurations.setAccessToken(
 
 class PaymentController {
   async create(request, response) {
-    const dataPurchase = JSON.parse(request.body.description.replace(/'/g, '"'))
     mercadopago.payment
       .create(request.body)
       .then(async (data) => {
         if (data.body.status === "approved") {
 
           const requestCreate = await Request.create({
-            user_id: dataPurchase.user_id,
-            value: dataPurchase.value,
+            user_id: request.body.metadata.user_id,
+            value: request.body.metadata.value,
             id_payment_mp: data.body.id,
 
           });
 
           await Address.create({
-            ...dataPurchase.address,
+            ...request.body.metadata.address,
             request_id: requestCreate.id
           });
 
-          for (let i = 0; i < dataPurchase.products.length; i++) {
-            const findProduct = await Product.findByPk(dataPurchase.products[i].product_id)
+          const promiseRequest = await request.body.additional_info.items.map(async (product) =>  {
+            const findProduct = await Product.findByPk(Number(product.id))
 
             if (findProduct) {
               await ProductRequest.create({
-                ...dataPurchase.products[i],
+                product_id: Number(product.id),
+                quantity: product.quantity,
                 request_id: requestCreate.id,
-              })
+              });
             }
-          }
+          });
 
-          await Cart.destroy({ where: { user_id: dataPurchase.user_id }})
+          await Promise.all(promiseRequest);
+
+          await Cart.destroy({ where: { user_id: request.body.metadata.user_id }})
 
           return response.status(200).json(data.body);
         }
       })
       .catch((error) => {
-        console.log(error)
+        console.error("\n\n\n error: \n", error)
         return response.status(400).json(error)
       })
   }

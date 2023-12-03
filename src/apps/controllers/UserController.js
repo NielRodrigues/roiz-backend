@@ -7,7 +7,10 @@ import Favorite from "../models/Favorite";
 
 class UserController {
   async index(request, response) {
-    const users = await User.findAll({ order: ["id"] });
+    const users = await User.findAll({ 
+      attributes: { exclude: ["password_hash" ]},
+      order: ["id"], 
+    });
 
     return response.status(200).json(users);
   }
@@ -16,6 +19,7 @@ class UserController {
     const { id } = request.params;
 
     const user = await User.findByPk(id, {
+      attributes: { exclude: ["password_hash" ]},
       include: [
         {
           model: Cart,

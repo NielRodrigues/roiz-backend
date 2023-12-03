@@ -3,6 +3,7 @@ import Cart from "../models/Cart";
 import User from "../models/User";
 import Product from "../models/Product";
 
+
 class CartController {
   async index(request, response) {
     const { id } = request.params;

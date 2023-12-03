@@ -95,6 +95,7 @@ routes.get("/requests_user/:id", request.showUser);
 
 // Payment
 routes.post("/payment", payment.create);
+routes.post("/webhook/mercado_pago", payment.create);
 
 // Chart
 routes.get("/chart", chart.index);
