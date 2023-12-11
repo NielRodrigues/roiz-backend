@@ -15,10 +15,51 @@ class ProductController {
     const order = [sequelize.literal("RANDOM()")];
 
     if (search) {
-      where = {
-        ...where,
-        name: { [Op.substring]: search },
-      };
+      const splitSearch = search.split(" ");
+
+      if (Number(search)){
+        where = {
+          ...where,
+          [Op.or]: [
+            { name: { [Op.like]: {[Op.any]: splitSearch} } },
+            { description: { [Op.like]: {[Op.any]: splitSearch} } },
+
+            { name: { [Op.iLike]: splitSearch[0] } },
+            { description: { [Op.iLike]: splitSearch[0] } },
+
+            { name: { [Op.iLike]: search } },
+            { description: { [Op.iLike]: search } },
+
+            { name: { [Op.substring]: search } },
+            { description: { [Op.substring]: search } },
+
+            { name: { [Op.startsWith]: search } },
+            { description: { [Op.startsWith]: search } },
+
+            { id: { [Op.eq]: Number(search) }},
+          ],
+        }
+      } else {
+        where = {
+          ...where,
+          [Op.or]: [
+            { name: { [Op.like]: {[Op.any]: splitSearch} } },
+            { description: { [Op.like]: {[Op.any]: splitSearch} } },
+            
+            { name: { [Op.iLike]: splitSearch[0] } },
+            { description: { [Op.iLike]: splitSearch[0] } },
+            
+            { name: { [Op.iLike]: search } },
+            { description: { [Op.iLike]: search } },
+
+            { name: { [Op.substring]: search } },
+            { description: { [Op.substring]: search } },
+
+            { name: { [Op.startsWith]: search } },
+            { description: { [Op.startsWith]: search } },
+          ],
+        }
+      }
     }
 
     if (excepct) {
