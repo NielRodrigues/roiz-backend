@@ -52,7 +52,7 @@ class CartController {
       return response.status(400).json({ error: "Error on validate schema" });
     }
 
-    const { product_id, user_id } = request.body;
+    const { product_id, user_id, quantity } = request.body;
 
     const findUser = await User.findByPk(user_id);
 
@@ -70,6 +70,10 @@ class CartController {
 
     if (!findProduct) {
       return response.status(404).json({ error: "Product not found" });
+    }
+
+    if(quantity > findProduct.quantity_products) {
+      return response.status(403).json({ error: "Quantity ordered is greater than we offer" });
     }
 
     const findProductOnCart = Items.filter(
@@ -140,6 +144,11 @@ class CartController {
           user_id,
         },
       });
+
+      if((findProductOnCartUser.quantity + 1) > findProduct.quantity_products) {
+        return response.status(403).json({ error: "Quantity ordered is greater than we offer" });
+      }
+
       await Cart.update(
         {
           ...request.body,
@@ -156,6 +165,10 @@ class CartController {
       return response
         .status(200)
         .json({ message: "Product has been added on Cart" });
+    }
+
+    if(1 > findProduct.quantity_products) {
+      return response.status(403).json({ error: "Quantity ordered is greater than we offer" });
     }
 
     await Cart.create({

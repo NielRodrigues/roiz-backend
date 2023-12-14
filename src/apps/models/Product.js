@@ -49,6 +49,10 @@ Product.init(
       type: Sequelize.STRING,
       allowNull: true,
     },
+    quantity_products: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+    },
   },
   {
     sequelize,

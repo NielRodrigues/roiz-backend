@@ -33,6 +33,15 @@ class PaymentController {
             const findProduct = await Product.findByPk(Number(product.id))
 
             if (findProduct) {
+
+              await Product.update({
+                quantity_products: findProduct.quantity_products - product.quantity
+              }, {
+                where: {
+                  id: Number(product.id),
+                }
+              })
+
               await ProductRequest.create({
                 product_id: Number(product.id),
                 quantity: product.quantity,
