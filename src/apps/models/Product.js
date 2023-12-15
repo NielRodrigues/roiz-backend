@@ -53,6 +53,18 @@ Product.init(
       type: Sequelize.INTEGER,
       allowNull: false,
     },
+    sales: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+    },
+    access: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+    },
+    details: {
+      type: Sequelize.TEXT,
+      allowNull: false,
+    },
   },
   {
     sequelize,

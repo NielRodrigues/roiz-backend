@@ -1,4 +1,4 @@
-import * as Yup from "yup";
+import "dotenv/config";
 import mercadopago from "mercadopago";
 import Address from "../models/Address";
 import Request from "../models/Request";
@@ -6,9 +6,7 @@ import ProductRequest from "../models/ProductRequest";
 import Product from "../models/Product";
 import Cart from "../models/Cart";
 
-mercadopago.configurations.setAccessToken(
-  "TEST-392570244808121-090809-8bf4c2362fc72d64eed1ef2c786a8368-565262359"
-)
+mercadopago.configurations.setAccessToken(process.env.ACCESS_KEY_MERCADO_PAGO)
 
 class PaymentController {
   async create(request, response) {
@@ -35,7 +33,8 @@ class PaymentController {
             if (findProduct) {
 
               await Product.update({
-                quantity_products: findProduct.quantity_products - product.quantity
+                quantity_products: findProduct.quantity_products - product.quantity,
+                sales: findProduct.sales + 1,
               }, {
                 where: {
                   id: Number(product.id),

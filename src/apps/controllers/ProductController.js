@@ -9,10 +9,18 @@ const sequelize = new Sequelize(config);
 
 class ProductController {
   async index(request, response) {
-    const { search, category, excepct } = request.query;
+    const { search, category, excepct, more_sales, more_access } = request.query;
 
     let where = {};
-    const order = [sequelize.literal("RANDOM()")];
+    let order = [sequelize.literal("RANDOM()")];
+
+    if (more_sales) {
+      order = [["sales", "DESC"]]
+    }
+
+    if (more_access) {
+      order = [["access", "DESC"]]
+    }
 
     if (search) {
       const splitSearch = search.split(" ");
@@ -86,6 +94,10 @@ class ProductController {
       offset: limit * page - limit,
     });
 
+    console.log("order", order)
+
+    console.log("\n\n\n\n\n==============================\n\n\n\n products >>> \n\n", products)
+
     const productInfo = [];
 
     const promiseProducts =  products.map(async (item) => {
@@ -119,6 +131,12 @@ class ProductController {
     const likes = await Favorite.count({ where: { product_id: id }});
     const rates_count = await Rate.count({ where: { product_id: id }});
     const sum = await Rate.sum("stars", { where: { product_id: id }});
+
+    await Product.update({
+      access: findProduct.access + 1,
+    }, {
+      where: { id }
+    })
 
     return response.status(200).json({
       ...findProduct.dataValues,
