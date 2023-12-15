@@ -55,11 +55,11 @@ Product.init(
     },
     sales: {
       type: Sequelize.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     access: {
       type: Sequelize.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     details: {
       type: Sequelize.TEXT,
