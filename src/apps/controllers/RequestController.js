@@ -30,7 +30,7 @@ class RequestController {
     const limit = request.query.limit || 20;
 
     const requests = await Request.findAll({ 
-      order: ["id"],
+      order: [["id", "DESC"]],
       attributes: { exclude: ["updatedAt"]},
       include: [
         {
@@ -112,7 +112,7 @@ class RequestController {
     const limit = request.query.limit || 20;
 
     const requests = await Request.findAll({ 
-      order: ["id"],
+      order: [["id", "DESC"]],
       attributes: { exclude: ["updatedAt"]},
       include: [
         {

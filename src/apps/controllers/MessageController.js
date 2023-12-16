@@ -4,7 +4,19 @@ import User from "../models/User";
 
 class MessageController {
   async index(request, response) {
-    const messages = await Message.findAll({ order: [["id", "DESC"]] });
+    const{ search } = request.query; 
+
+    let where = {};
+
+    if (search) {
+      if(Number(search)) {
+        where = {
+          ...where,
+          id: Number(search)
+        };
+      }
+    }
+    const messages = await Message.findAll({ order: [["id", "DESC"]], where });
 
     const messagesWithUser = [];
 

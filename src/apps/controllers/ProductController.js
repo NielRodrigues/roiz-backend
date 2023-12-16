@@ -94,10 +94,6 @@ class ProductController {
       offset: limit * page - limit,
     });
 
-    console.log("order", order)
-
-    console.log("\n\n\n\n\n==============================\n\n\n\n products >>> \n\n", products)
-
     const productInfo = [];
 
     const promiseProducts =  products.map(async (item) => {

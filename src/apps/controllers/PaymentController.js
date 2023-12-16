@@ -57,7 +57,6 @@ class PaymentController {
         }
       })
       .catch((error) => {
-        console.error("\n\n\n error: \n", error)
         return response.status(400).json(error)
       })
   }

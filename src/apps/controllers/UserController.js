@@ -7,9 +7,23 @@ import Favorite from "../models/Favorite";
 
 class UserController {
   async index(request, response) {
+    const{ search } = request.query; 
+
+    let where = {};
+
+    if (search) {
+      if(Number(search)) {
+        where = {
+          ...where,
+          id: Number(search)
+        };
+      }
+    }
+
     const users = await User.findAll({ 
       attributes: { exclude: ["password_hash" ]},
       order: ["id"], 
+      where,
     });
 
     return response.status(200).json(users);

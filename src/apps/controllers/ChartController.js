@@ -67,18 +67,12 @@ class ChartController {
     let monthValue = Number(date.getMonth()+1)
     let yearValue = Number(date.getFullYear())
 
-    console.log("\n\nMonth >>> ", monthValue)
-    console.log("Year >>> ", yearValue)
-
-    console.log("\n\n\n\n")
-
     for (let i = 1; i <= 12; i++) {
       if(monthValue <= 1) {
         monthValue = 12 
         yearValue = yearValue - 1
       }
       
-      console.log(`\n\n${i}.`)
       const sales = await Request.count({
         where: {
           [Op.and]: [
@@ -92,8 +86,6 @@ class ChartController {
       salesMonths.unshift(sales)
       monthValue--
     }
-
-    console.log("\n\n\n\n")
 
     const PromiseTopFive = topFive.map(async (item) => {
       const product = await Product.findByPk(item.product_id)

@@ -5,7 +5,7 @@ module.exports = {
     return queryInterface.addColumn("products", "quantity_products", {
       type: Sequelize.INTEGER,
       allowNull: false,
-      defaultValue: 15,
+      defaultValue: 1,
     });
   },
 
