@@ -9,7 +9,7 @@ const sequelize = new Sequelize(config);
 
 class ProductController {
   async index(request, response) {
-    const { search, category, excepct, more_sales, more_access } = request.query;
+    const { search, category, excepct, more_sales, more_access, orderS } = request.query;
 
     let where = {};
     let order = [sequelize.literal("RANDOM()")];
@@ -20,6 +20,18 @@ class ProductController {
 
     if (more_access) {
       order = [["access", "DESC"]]
+    }
+
+    if (orderS) {
+      if(orderS === 'a-z') {
+        order = [["name", "ASC"]]
+      } else if (orderS === 'z-a') {
+        order = [["name", "DESC"]]
+      } else if (orderS === 'gp') {
+        order = [["price_purchase", "DESC"]]
+      } else if (orderS === 'lp') {
+        order = [["price_purchase", "ASC"]]
+      }
     }
 
     if (search) {

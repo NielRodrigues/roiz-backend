@@ -1,6 +1,5 @@
 import crypto from "crypto";
 import { extname, resolve } from "path";
-// eslint-disable-next-line import/no-extraneous-dependencies
 import multer from "multer";
 
 export default {
