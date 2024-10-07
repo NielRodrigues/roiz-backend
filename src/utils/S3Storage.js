@@ -11,8 +11,8 @@ class S3Storage {
     this.client = new S3Client({
       region: "us-east-1",
       credentials: {
-        accessKeyId: "AKIAUX2XI2KFHCPPIS7J",
-        secretAccessKey: "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",
+        accessKeyId: "keyId",
+        secretAccessKey: "secret",
       },
     });
   }
